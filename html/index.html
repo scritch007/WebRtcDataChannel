@@ -3,11 +3,44 @@
 <script>
 var userid = "{{.Id}}";
 var wspath = "{{.WSocketURL}}";
-
+var first = {{.First}};
 </script>
 <script src="/static/js/DataChannel.js"></script>
 <script src="/static/js/datachannel_test.js"></script>
+<script>
+function goon(){
+	var channelName = "superchannel"
+	if (first){
+		datachannel.open(channelName);
+	}else{
+		datachannel.connect(channelName);
+	}
+}
+
+function sendmessage(){
+	var messageInput = document.getElementById("message");
+	var text = messageInput.value;
+	messageInput.value = "";
+	var sending = document.createElement("div");
+	sending.innerHTML = "->" + text;
+	document.getElementById("receivedMessages").appendChild(sending);
+	datachannel.send(text);
+}
+datachannel.onmessage = function (message, userId) {
+  var received = document.createElement("div");
+  received.innerHTML = "<-" + message;
+  document.getElementById("receivedMessages").appendChild(received);
+};
+
+datachannel.onopen = function (userId) {
+  document.getElementById("message").removeAttribute("disabled");
+};
+</script>
 </head>
-<div onload="startit()">
+<body>
+<button id="stuff" onclick="goon()">Go on</button>
+<input type="text" id="message" disabled></body><button onclick="sendmessage()">Send</button>
+<div id="receivedMessages">
 </div>
+</body>
 </html>

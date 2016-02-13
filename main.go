@@ -90,12 +90,20 @@ func home(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(r.Proto, "HTTPS") {
 		socketProto = "wss"
 	}
+	var first bool
+	if 0 == len(serverConnections) {
+		first = true
+	} else {
+		first = false
+	}
 	values := struct {
 		WSocketURL string
 		Id         string
+		First      bool
 	}{
 		WSocketURL: socketProto + "://" + r.Host + "/ws/" + id,
 		Id:         id,
+		First:      first,
 	}
 	tmpl.Execute(w, values)
 }

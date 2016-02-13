@@ -74,10 +74,5 @@ var onJoinChannel = function() {
   datachannel.connect(channelName);
 };
 
-datachannel.onopen = function (userId) {
-  console.log("Yes got it");
-};
 
-datachannel.onmessage = function (message, userId) {
-  console.log("New message");
-};
+
